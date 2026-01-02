@@ -1,17 +1,22 @@
-//! 1. Reverse array
+//! 1. Two Sum
 //!
-//! Given an array of integers nums,
-//! return reversed array of integers.
+//! Given an array of integers nums and an integer target,
+//! return indices of the two numbers such that they add up to target.
 
-/// Solution 1: mutable reverse
-fn solution1(mut nums: Vec<i32>) -> Vec<i32> {
-    nums.reverse();
-    nums
+/// Solution 1: [Название подхода]
+/// Time: O(?) - [описание]
+/// Space: O(?) - [описание]
+/// Key insight: [главная идея]
+fn solution1(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    vec![]
 }
 
-// /// Solution 2: Iterator collect
-// fn solution2(nums: Vec<i32>) -> Vec<i32> {
-//     nums.into_iter().rev().collect()
+// /// Solution 1: [Название подхода]
+// /// Time: O(?) - [описание]
+// /// Space: O(?) - [описание]
+// /// Key insight: [главная идея]
+// fn solution2(nums: Vec<i32>, target: i32) -> Vec<i32> {
+//     todo!()
 // }
 
 // region:    --- Tests
@@ -19,19 +24,19 @@ fn solution1(mut nums: Vec<i32>) -> Vec<i32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_all_solutions;
-    use crate::test_all_solutions_for_cases;
-    use crate::utils::*;
+    use crate::{test_all_solutions_for_cases, utils::*};
 
     // region:    --- Test Cases
 
     /// Создание набора тестов
-    fn test_cases() -> Vec<TestCase<Vec<i32>, Vec<i32>>> {
+    fn test_cases() -> Vec<TestCase<(Vec<i32>, i32), Vec<i32>>> {
         vec![
-            TestCase::new(vec![1, 2, 3], vec![3, 2, 1]),
-            TestCase::new(vec![2, 7, 11, 15], vec![15, 11, 7, 2]),
-            TestCase::new(vec![], vec![]),
-            TestCase::new(vec![5], vec![5]),
+            // Пример из LeetCode
+            // TestCase::new((vec![2, 7, 11, 15], 9), vec![0, 1]),
+
+            // Edge cases
+            // TestCase::new((vec![], 0), vec![]), // пустой массив
+            // TestCase::new((vec![1], 1), vec![]), // один элемент
         ]
     }
 
@@ -41,14 +46,22 @@ mod tests {
 
     #[test]
     fn test_solution_1() {
-        let tester = TestCase::new(vec![2, 7, 11, 15], vec![15, 11, 7, 2]);
-        tester.run_and_verify(|nums| solution1(nums), "solution1");
+        for tester in &test_cases() {
+            tester.assert_solution(
+                |(nums, target): (Vec<i32>, i32)| solution1(nums, target),
+                "sol1",
+            );
+        }
     }
 
     // #[test]
     // fn test_solution_2() {
-    //     let tester = TestCase::new(vec![2, 7, 11, 15], vec![15, 11, 7, 2]);
-    //     tester.run_and_verify(|nums| solution2(nums), "solution2");
+    //     for tester in &test_cases() {
+    //         tester.assert_solution(
+    //             |(nums, target): (Vec<i32>, i32)| solution2(nums, target),
+    //             "sol2",
+    //         );
+    //     }
     // }
 
     // endregion: --- Basic Tests
@@ -57,54 +70,74 @@ mod tests {
 
     #[test]
     fn test_solutions_equal() {
-        let cases = test_cases();
-        test_all_solutions_for_cases!(cases, solution1);
+        test_all_solutions_for_cases!(
+            test_cases(),
+            |(nums, target): (Vec<i32>, i32)| solution1(nums, target),
+            // |(nums, target): (Vec<i32>, i32)| solution2(nums, target)
+        );
     }
-
     // endregion: --- Equality Tests
 
     // region:    --- Benchmarks
 
     #[test]
+    #[cfg(feature = "bench")]
     fn bench() {
-        // Используем стандартную конфигурацию
-        let solutions: Vec<(&str, Box<dyn Fn(Vec<i32>) -> Vec<i32>>)> = vec![
-            ("reverse", Box::new(|input| solution1(input))),
-            // ("iterator", Box::new(|input| solution2(input))),
+        let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+            ("sol1", Box::new(|(input, target)| solution1(input, target))),
+            // ("sol2", Box::new(|(input, target)| solution2(input, target))),
         ];
 
-        let results = compare_solutions(
-            solutions,
-            bench_config::standard_test_input(),
-            bench_config::SMALL_ITERATIONS,
-        );
+        let input = &test_cases()[0].input;
+        let results = compare_solutions(solutions, input, bench_config::SMALL_ITERATIONS);
 
         print_comparison_table(&results);
         analyze_benchmark_results(&results);
     }
 
     #[test]
+    #[cfg(feature = "bench")]
     fn bench_cases() {
-        let sizes = [10, 100, 1000, 10000];
-
-        for &size in &sizes {
-            let input: Vec<i32> = (0..size).collect();
-            let iterations = match size {
-                s if s <= 100 => 100_000,
-                s if s <= 1000 => 10_000,
-                _ => 1_000,
-            };
-
-            println!("\n=== n = {} ({} iterations) ===", size, iterations);
-
-            let solutions: Vec<(&str, Box<dyn Fn(Vec<i32>) -> Vec<i32>>)> = vec![
-                ("reverse", Box::new(|input| solution1(input))),
-                // ("iterator", Box::new(|input| solution2(input))),
+        for case in test_cases() {
+            let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+                ("sol1", Box::new(|(input, target)| solution1(input, target))),
+                // ("sol2", Box::new(|(input, target)| solution2(input, target))),
             ];
 
-            let results = compare_solutions(solutions, input, iterations);
+            let results = compare_solutions(solutions, &case.input, bench_config::SMALL_ITERATIONS);
             print_comparison_table(&results);
             analyze_benchmark_results(&results);
+        }
+    }
+
+    #[test]
+    #[cfg(feature = "bench")]
+    fn bench_scaling() {
+        let sizes = [4, 10, 100, 500, 1000];
+
+        for &size in &sizes {
+            // Генерируем большой массив
+            let nums: Vec<i32> = (0..size as i32).collect();
+            let target = (size as i32 - 2) + (size as i32 - 1);
+
+            let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+                ("sol1", Box::new(|(input, target)| solution1(input, target))),
+                // ("sol2", Box::new(|(input, target)| solution2(input, target))),
+            ];
+
+            let iterations = match size {
+                4 => 100_000, // 30 ns × 100k = 3 ms
+                10 => 50_000, // 200 ns × 50k = 10 ms
+                100 => 1_000, // 20 µs × 1k = 20 ms
+                500 => 100,
+                1000 => 10, // 2 ms × 10 = 20 ms
+                10000 => 1, // 140 ms × 1 = 140 ms
+                _ => 1,
+            };
+
+            println!("\n=== n = {} ===", size);
+            let results = compare_solutions(solutions, &(nums, target), iterations);
+            print_comparison_table(&results);
         }
     }
 

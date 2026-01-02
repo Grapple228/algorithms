@@ -94,9 +94,11 @@ mod tests {
 
     #[test]
     fn test_solutions_equal() {
-        test_all_solutions_for_cases!(test_cases(), |(nums, target): (Vec<i32>, i32)| solution1(
-            nums, target
-        ));
+        test_all_solutions_for_cases!(
+            test_cases(),
+            |(nums, target): (Vec<i32>, i32)| solution1(nums, target),
+            |(nums, target): (Vec<i32>, i32)| solution2(nums, target)
+        );
     }
     // endregion: --- Equality Tests
 
