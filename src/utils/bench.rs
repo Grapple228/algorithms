@@ -54,18 +54,20 @@ where
         Self { input, expected }
     }
 
-    /// Выполнить решение
-    pub fn execute<F>(&self, solution: F) -> O
+    /// Универсальный метод выполнения - работает с функциями любой арности
+    pub fn execute<F, Args>(&self, solution: F) -> O
     where
-        F: Fn(I) -> O,
+        F: Fn(Args) -> O,
+        I: Into<Args> + Clone,
     {
-        solution(self.input.clone())
+        solution(self.input.clone().into())
     }
 
     /// Быстрая проверка решения
-    pub fn assert_solution<F>(&self, solution: F, solution_name: &str)
+    pub fn assert_solution<F, Args>(&self, solution: F, solution_name: &str)
     where
-        F: Fn(I) -> O,
+        F: Fn(Args) -> O,
+        I: Into<Args> + Clone,
     {
         let result = self.execute(solution);
         assert_eq!(
@@ -144,7 +146,7 @@ where
 /// Сравнение нескольких решений
 pub fn compare_solutions<F, I, O>(
     solutions: Vec<(&str, F)>,
-    input: I,
+    input: &I,
     iterations: usize,
 ) -> Vec<BenchmarkResult>
 where

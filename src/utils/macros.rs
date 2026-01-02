@@ -24,16 +24,24 @@ macro_rules! test_all_solutions {
 macro_rules! test_all_solutions_for_cases {
     ($test_cases:expr, $($solution:expr),+) => {
         {
-            let solutions = vec![$( $solution ),+];
-            let solution_names = vec![$( stringify!($solution) ),+];
+            // Сохраняем решения как замыкания, принимающие I
+            let solutions: Vec<(&str, Box<dyn Fn(_) -> _>)> = vec![
+                $(
+                    (stringify!($solution), Box::new(|input| {
+                        // Преобразуем в нужный тип внутри
+                        $solution(input)
+                    })),
+                )+
+            ];
 
             let mut total_passed = 0;
 
             for test_case in $test_cases {
                 let mut results = Vec::new();
 
-                for solution in &solutions {
-                    results.push(test_case.execute(solution));
+                for (name, sol) in &solutions {
+                    let result = test_case.execute(|input| sol(input));
+                    results.push(result);
                 }
 
                 // Проверяем, что все результаты одинаковы
@@ -42,7 +50,7 @@ macro_rules! test_all_solutions_for_cases {
                     assert_eq!(
                         result, first_result,
                         "Solution {} differs from {} for input {:?}",
-                        solution_names[i], solution_names[0], test_case.input
+                        solutions[i].0, solutions[0].0, test_case.input
                     );
                 }
 
@@ -59,31 +67,5 @@ macro_rules! test_all_solutions_for_cases {
             println!("✅ All {} solutions passed {} test cases",
                      solutions.len(), total_passed);
         }
-    };
-}
-/// Макрос для быстрого создания бенчмарка
-#[macro_export]
-macro_rules! create_benchmark {
-    ($solutions:expr, $input:expr, $iterations:expr) => {{
-        use crate::utils::bench;
-
-        let boxed_solutions: Vec<(&str, Box<dyn Fn(_) -> _>)> = $solutions
-            .into_iter()
-            .map(|(name, sol)| (name, Box::new(sol) as Box<dyn Fn(_) -> _>))
-            .collect();
-
-        bench::compare_solutions_boxed(boxed_solutions, $input, $iterations)
-    }};
-
-    ($solutions:expr, $input:expr) => {{
-        create_benchmark!($solutions, $input, 100_000)
-    }};
-}
-
-/// Макрос для быстрого создания тест-кейса
-#[macro_export]
-macro_rules! test_case {
-    ($input:expr, $expected:expr) => {
-        crate::utils::bench::TestCase::new($input, $expected)
     };
 }
