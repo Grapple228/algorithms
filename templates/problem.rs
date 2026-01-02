@@ -3,19 +3,26 @@
 //! Given an array of integers nums and an integer target,
 //! return indices of the two numbers such that they add up to target.
 
+/// Входные данные для задачи
+type Input = (Vec<i32>, i32);
+/// Выходные данные (результат)
+type Output = Vec<i32>;
+
+use std::collections::HashMap;
+
 /// Solution 1: [Название подхода]
 /// Time: O(?) - [описание]
 /// Space: O(?) - [описание]
 /// Key insight: [главная идея]
-fn solution1(nums: Vec<i32>, target: i32) -> Vec<i32> {
+fn solution1(nums: Vec<i32>, target: i32) -> Output {
     vec![]
 }
 
-// /// Solution 1: [Название подхода]
+// /// Solution 2: [Название подхода]
 // /// Time: O(?) - [описание]
 // /// Space: O(?) - [описание]
 // /// Key insight: [главная идея]
-// fn solution2(nums: Vec<i32>, target: i32) -> Vec<i32> {
+// fn solution2(nums: Vec<i32>, target: i32) -> Output {
 //     todo!()
 // }
 
@@ -29,7 +36,7 @@ mod tests {
     // region:    --- Test Cases
 
     /// Создание набора тестов
-    fn test_cases() -> Vec<TestCase<(Vec<i32>, i32), Vec<i32>>> {
+    fn test_cases() -> Vec<TestCase<Input, Output>> {
         vec![
             // Пример из LeetCode
             // TestCase::new((vec![2, 7, 11, 15], 9), vec![0, 1]),
@@ -47,20 +54,14 @@ mod tests {
     #[test]
     fn test_solution_1() {
         for tester in &test_cases() {
-            tester.assert_solution(
-                |(nums, target): (Vec<i32>, i32)| solution1(nums, target),
-                "sol1",
-            );
+            tester.assert_solution(|(nums, target): Input| solution1(nums, target), "sol1");
         }
     }
 
     // #[test]
     // fn test_solution_2() {
     //     for tester in &test_cases() {
-    //         tester.assert_solution(
-    //             |(nums, target): (Vec<i32>, i32)| solution2(nums, target),
-    //             "sol2",
-    //         );
+    //         tester.assert_solution(|(nums, target): Input| solution2(nums, target), "sol2");
     //     }
     // }
 
@@ -72,8 +73,8 @@ mod tests {
     fn test_solutions_equal() {
         test_all_solutions_for_cases!(
             test_cases(),
-            |(nums, target): (Vec<i32>, i32)| solution1(nums, target),
-            // |(nums, target): (Vec<i32>, i32)| solution2(nums, target)
+            |(nums, target): Input| solution1(nums, target),
+            // |(nums, target): Input| solution2(nums, target)
         );
     }
     // endregion: --- Equality Tests
@@ -83,7 +84,7 @@ mod tests {
     #[test]
     #[cfg(feature = "bench")]
     fn bench() {
-        let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+        let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
             ("sol1", Box::new(|(input, target)| solution1(input, target))),
             // ("sol2", Box::new(|(input, target)| solution2(input, target))),
         ];
@@ -99,7 +100,7 @@ mod tests {
     #[cfg(feature = "bench")]
     fn bench_cases() {
         for case in test_cases() {
-            let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+            let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
                 ("sol1", Box::new(|(input, target)| solution1(input, target))),
                 // ("sol2", Box::new(|(input, target)| solution2(input, target))),
             ];
@@ -120,7 +121,7 @@ mod tests {
             let nums: Vec<i32> = (0..size as i32).collect();
             let target = (size as i32 - 2) + (size as i32 - 1);
 
-            let solutions: Vec<(&str, Box<dyn Fn((Vec<i32>, i32)) -> Vec<i32>>)> = vec![
+            let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
                 ("sol1", Box::new(|(input, target)| solution1(input, target))),
                 // ("sol2", Box::new(|(input, target)| solution2(input, target))),
             ];

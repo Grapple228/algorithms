@@ -22,7 +22,7 @@ macro_rules! test_all_solutions {
 /// Проверка всех решений для вектора тест-кейсов
 #[macro_export]
 macro_rules! test_all_solutions_for_cases {
-    ($test_cases:expr, $($solution:expr),+) => {
+    ($test_cases:expr, $($solution:expr),+ $(,)?) => {
         {
             // Сохраняем решения как замыкания, принимающие I
             let solutions: Vec<(&str, Box<dyn Fn(_) -> _>)> = vec![

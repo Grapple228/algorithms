@@ -1,49 +1,48 @@
-//! 1. Two Sum
+//! 217. Contains Duplicate
 //!
-//! Given an array of integers nums and an integer target,
-//! return indices of the two numbers such that they add up to target.
+//! Given an integer array `nums`, return `true`
+//! if any value appears at least twice in the array,
+//! and return `false` if every element is distinct.
 
 /// Входные данные для задачи
-type Input = (Vec<i32>, i32);
+type Input = Vec<i32>;
 /// Выходные данные (результат)
-type Output = Vec<i32>;
+type Output = bool;
 
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 /// Solution 1: brute force
-/// Time: O(n²), Space: O(1)
-/// Best for: n ≤ 20
-fn solution1(nums: Vec<i32>, target: i32) -> Output {
-    let n = nums.len();
+/// Time: O(n²)
+/// Space: O(1)
+/// Key insight: Перебор всех возможных вариантов
+fn solution1(nums: Vec<i32>) -> Output {
+    let len = nums.len();
 
-    for i in 0..n {
-        for j in i + 1..n {
-            if nums[i] + nums[j] == target {
-                return vec![i as i32, j as i32];
+    for i in 0..len {
+        for j in i + 1..len {
+            if nums[i] == nums[j] {
+                return true;
             }
         }
     }
 
-    vec![]
+    false
 }
 
-/// Solution 2: HashMap  
-/// Time: O(n) average, Space: O(n)
-/// Best for: n ≥ 100
-fn solution2(nums: Vec<i32>, target: i32) -> Output {
-    let mut hashmap = HashMap::with_capacity(nums.len());
+/// Solution 2: HashSet
+/// Time: O(n)
+/// Space: O(n)
+/// Key insight: Если Set уже содержит значение, значит повтор
+fn solution2(nums: Vec<i32>) -> Output {
+    let mut set = HashSet::with_capacity(nums.len());
 
-    for (i, &num) in nums.iter().enumerate() {
-        let complement = target - num;
-
-        if let Some(&j) = hashmap.get(&complement) {
-            return vec![j as i32, i as i32];
+    for value in nums {
+        if !set.insert(value) {
+            return true;
         }
-
-        hashmap.insert(num, i);
     }
 
-    vec![]
+    return false;
 }
 
 // region:    --- Tests
@@ -58,14 +57,13 @@ mod tests {
     /// Создание набора тестов
     fn test_cases() -> Vec<TestCase<Input, Output>> {
         vec![
-            // Основные
-            TestCase::new((vec![2, 7, 11, 15], 9), vec![0, 1]),
-            TestCase::new((vec![3, 2, 4], 6), vec![1, 2]),
-            TestCase::new((vec![3, 3], 6), vec![0, 1]),
+            // Пример из LeetCode
+            TestCase::new(vec![1, 2, 3, 1], true),
+            TestCase::new(vec![1, 2, 3, 4], false),
+            TestCase::new(vec![1, 1, 1, 3, 3, 4, 3, 2, 4, 2], true),
             // Edge cases
-            TestCase::new((vec![0, 4, 3, 0], 0), vec![0, 3]),
-            TestCase::new((vec![-3, 4, 3, 90], 0), vec![0, 2]),
-            TestCase::new((vec![1, 1, 1, 1, 1], 2), vec![0, 1]),
+            // TestCase::new((vec![], 0), false), // пустой массив
+            // TestCase::new((vec![1], 1), false), // один элемент
         ]
     }
 
@@ -76,14 +74,14 @@ mod tests {
     #[test]
     fn test_solution_1() {
         for tester in &test_cases() {
-            tester.assert_solution(|(nums, target): Input| solution1(nums, target), "sol1");
+            tester.assert_solution(|nums: Input| solution1(nums), "sol1");
         }
     }
 
     #[test]
     fn test_solution_2() {
         for tester in &test_cases() {
-            tester.assert_solution(|(nums, target): Input| solution2(nums, target), "sol2");
+            tester.assert_solution(|nums: Input| solution2(nums), "sol2");
         }
     }
 
@@ -95,8 +93,8 @@ mod tests {
     fn test_solutions_equal() {
         test_all_solutions_for_cases!(
             test_cases(),
-            |(nums, target): Input| solution1(nums, target),
-            |(nums, target): Input| solution2(nums, target)
+            |nums: Input| solution1(nums),
+            |nums: Input| solution2(nums)
         );
     }
     // endregion: --- Equality Tests
@@ -107,8 +105,8 @@ mod tests {
     #[cfg(feature = "bench")]
     fn bench() {
         let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
-            ("sol1", Box::new(|(input, target)| solution1(input, target))),
-            ("sol2", Box::new(|(input, target)| solution2(input, target))),
+            ("sol1", Box::new(|input| solution1(input))),
+            ("sol2", Box::new(|input| solution2(input))),
         ];
 
         let input = &test_cases()[0].input;
@@ -123,8 +121,8 @@ mod tests {
     fn bench_cases() {
         for case in test_cases() {
             let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
-                ("sol1", Box::new(|(input, target)| solution1(input, target))),
-                ("sol2", Box::new(|(input, target)| solution2(input, target))),
+                ("sol1", Box::new(|input| solution1(input))),
+                ("sol2", Box::new(|input| solution2(input))),
             ];
 
             let results = compare_solutions(solutions, &case.input, bench_config::SMALL_ITERATIONS);
@@ -141,11 +139,10 @@ mod tests {
         for &size in &sizes {
             // Генерируем большой массив
             let nums: Vec<i32> = (0..size as i32).collect();
-            let target = (size as i32 - 2) + (size as i32 - 1);
 
             let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
-                ("sol1", Box::new(|(input, target)| solution1(input, target))),
-                ("sol2", Box::new(|(input, target)| solution2(input, target))),
+                ("sol1", Box::new(|input| solution1(input))),
+                ("sol2", Box::new(|input| solution2(input))),
             ];
 
             let iterations = match size {
@@ -159,7 +156,7 @@ mod tests {
             };
 
             println!("\n=== n = {} ===", size);
-            let results = compare_solutions(solutions, &(nums, target), iterations);
+            let results = compare_solutions(solutions, &nums, iterations);
             print_comparison_table(&results);
         }
     }
