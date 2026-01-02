@@ -1,58 +1,222 @@
-# algorithms
+# Algorithms Learning System / Система изучения алгоритмов
 
-`algorithms` is a library for...
+Профессиональная система для изучения и сравнения алгоритмов на Rust.  
+Структурированный путь от основ до продвинутых тем с акцентом на практическое понимание.
 
-## Table of contents
+[![Rust](https://img.shields.io/badge/rust-1.70%2B-orange.svg)](https://www.rust-lang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Progress](https://img.shields.io/badge/Progress-1.7%25-yellow)](https://github.com/Grapple228/algorithms)
+[![Last Solved](https://img.shields.io/badge/Last%20Solved-Contains%20Duplicate-blue)](https://leetcode.com/problems/contains-duplicate/)
 
-- [algorithms](#algorithms)
-- [Description](#description)
-- [Features](#features)
-- [Installation](#installation)
-- [Examples](#examples)
-- [Plans for Future](#plans-for-future)
-- [Acknowledgments](#acknowledgments)
-- [Contributing](#contributing)
-- [License](#license)
+## 📋 О проекте
 
-## Description
+Это не просто коллекция решений LeetCode, а **полноценная система обучения** с:
 
-- **feature**: feature description
+- 🧠 **Сравнением подходов** (минимум 2 решения на задачу)
+- 📊 **Бенчмарками производительности** (реальные измерения)
+- 🏗️ **Масштабируемой структурой** (готово для 2000+ задач)
+- 📈 **Аналитикой паттернов** (практические инсайты)
 
-## Features
+## 🎯 Ключевые особенности
 
-- **bench**: enables benchmark tests
-  to run test use:
+### 🧩 Структурированный план обучения
 
-```sh
-cargo test -r _01_hash_tables::tests::bench -- --nocapture
-```
+15 модулей от простого к сложному согласно [плану обучения](docs/LEARNING_PATH.md):
 
-## Installation
+1. **Hash Tables** (хэш-таблицы)
+2. **Two Pointers** (два указателя)
+3. **Binary Search** (бинарный поиск)
+4. **Sliding Window** (скользящее окно)
+5. **Stacks & Queues** (стеки и очереди)
+6. **Linked Lists** (связные списки)
+7. **Trees** (деревья)
+8. **Graphs** (графы)
+9. **Heaps** (кучи)
+10. **Dynamic Programming** (динамическое программирование)
+11. **Backtracking** (поиск с возвратом)
+12. **Greedy Algorithms** (жадные алгоритмы)
+13. **Intervals** (интервалы)
+14. **Trie & Bit Manipulation** (префиксные деревья и битовые операции)
+15. **Advanced Patterns** (продвинутые паттерны)
 
-To include `algorithms` in your project, add it to your dependencies. For example:
+### 📊 Сравнение производительности
 
-```toml
-# Example for Cargo.toml (Rust)
-[dependencies]
-algorithms = { version = "*", features = ["scylla", "redis"] }
-```
-
-## Examples
+Каждая задача решается минимум двумя способами с измерением времени:
 
 ```rust
-// code here
+// Пример для Two Sum:
+// Brute Force (O(n²)) vs HashMap (O(n))
+test_all_solutions_for_cases!(
+    test_cases(),
+    |(nums, target): Input| solution1_brute_force(nums, target),
+    |(nums, target): Input| solution2_hashmap(nums, target),
+);
 ```
 
-## Plans for future
+### 🔍 Система позволяет обнаруживать паттерны
 
-- Implement something...
+Для HashMap/HashSet:
+n ≤ 20: Brute force быстрее (накладные расходы!)
+n ≈ 50-100: Переломный момент
+n ≥ 100: Hash-структуры в 5-40x быстрее
 
-## Acknowledgments
+## 👥 Для кого этот проект
 
-## Contributing
+### 🎓 Начинающие программисты
 
-Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request. I wrote this library for my own use, so it may not fit everyone's needs, but your input is appreciated!
+- Пошаговый план изучения алгоритмов
+- Сравнение разных подходов
+- Практические примеры на Rust
 
-## License
+### 🚀 Опытные разработчики
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+- Глубокое понимание производительности
+- Готовые шаблоны для новых задач
+- Система бенчмаркинга
+
+### 🔍 Готовящиеся к собеседованиям
+
+- LeetCode задачи с разбором
+- Анализ сложности алгоритмов
+- Ключевые инсайты по каждой теме
+
+## 📊 Текущий прогресс
+
+### 📈 Общая статистика
+
+| Метрика                 | Значение | Прогресс |
+| ----------------------- | -------- | -------- |
+| **Всего задач в плане** | 120      | 100%     |
+| **Решено задач**        | 2        | 1.7%     |
+| **Начато модулей**      | 1 из 15  | 6.7%     |
+
+---
+
+### 🏗️ Прогресс по модулям
+
+#### 🟢 **Модуль 1: Hash Tables** (2/7 задач, 28%)
+
+| #   | Задача                                                                                      | Статус        | Сложность | Подходы                      | Ключевые инсайты                                                           |
+| --- | ------------------------------------------------------------------------------------------- | ------------- | --------- | ---------------------------- | -------------------------------------------------------------------------- |
+| 1   | [Two Sum](https://leetcode.com/problems/two-sum/)                                           | ✅ Решена     | 🟢 Easy   | 1. Brute Force<br>2. HashMap | • HashMap выигрывает при n ≥ 100<br>• Trade-off: память ↔ время            |
+| 217 | [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)                     | ✅ Решена     | 🟢 Easy   | 1. Brute Force<br>2. HashSet | • HashSet::insert() возвращает bool<br>• Тот же переломный момент n=50-100 |
+| 242 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/)                               | 🔄 В процессе | 🟢 Easy   | _планируется_                | _ожидается сравнение frequency array vs HashMap_                           |
+| 49  | [Group Anagrams](https://leetcode.com/problems/group-anagrams/)                             | ⏳ В очереди  | 🟡 Medium | -                            | -                                                                          |
+| 349 | [Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)     | ⏳ В очереди  | 🟢 Easy   | -                            | -                                                                          |
+| 128 | [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | ⏳ В очереди  | 🔴 Hard   | -                            | -                                                                          |
+| 560 | [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)               | ⏳ В очереди  | 🟡 Medium | -                            | -                                                                          |
+
+#### ⚪ **Модуль 2: Two Pointers** (0/6 задач, 0%)
+
+| #   | Задача                    | Статус       | Сложность |
+| --- | ------------------------- | ------------ | --------- |
+| 125 | Valid Palindrome          | ⏳ В очереди | 🟢 Easy   |
+| 167 | Two Sum II                | ⏳ В очереди | 🟡 Medium |
+| 15  | 3Sum                      | ⏳ В очереди | 🟡 Medium |
+| 11  | Container With Most Water | ⏳ В очереди | 🟡 Medium |
+| 42  | Trapping Rain Water       | ⏳ В очереди | 🔴 Hard   |
+| 16  | 3Sum Closest              | ⏳ В очереди | 🟡 Medium |
+
+_Остальные 13 модулей пока не начаты_
+
+---
+
+## 🏗️ Структура проекта
+
+```text
+algorithms/
+├── src/
+│   ├── _01_hash_tables/          # Модуль 1: Хэш-таблицы
+│   │   ├── about.md              # Теория модуля
+│   │   ├── mod.rs               # Экспорт задач модуля
+│   │   ├── p001_two_sum/        # Задача #1
+│   │   │   ├── mod.rs           # Код + тесты + бенчмарки
+│   │   │   └── problem.md       # Описание задачи
+│   │   └── p217_contains_duplicate/  # Задача #217
+│   ├── utils/                   # Вспомогательные утилиты
+│   │   ├── bench.rs            # Бенчмаркинг
+│   │   ├── macros.rs           # Макросы для тестирования
+│   │   └── mod.rs
+│   └── lib.rs
+├── docs/
+│   ├── LEARNING_PATH.md        # Подробный план обучения
+│   └── PROGRESS_TRACKER.md     # Отслеживание прогресса
+├── templates/                  # Шаблоны для новых задач
+│   ├── module.md             # Шаблон документации модуля
+│   ├── problem.rs             # Шаблон кода задачи
+│   └── problem.md             # Шаблон документации
+└── Cargo.toml
+```
+
+## 🚀 Быстрый старт
+
+```sh
+# Клонировать репозиторий
+git clone https://github.com/Grapple228/algorithms.git
+cd algorithms
+
+# Запустить тесты
+cargo test
+
+# Запустить бенчмарки (требует feature)
+cargo test --features bench
+
+# Запустить тесты конкретной задачи
+cargo test -p algorithms _01_hash_tables::p001_two_sum
+
+# Запустить тесты с выводом
+cargo test -- --nocapture
+```
+
+## 🔧 Фичи
+
+- `bench` - бенчмарки производительности
+  Включает подробное сравнение решений с анализом производительности
+
+```sh
+# Запуск бенчмарков
+cargo test --features bench -- --nocapture
+
+# Пример вывода:
+┌───────────────────────────────────────────┐
+│          Performance Comparison           │
+├────────────┬────────────┬─────────────────┤
+│ Solution   │ Avg Time   │ Operations/sec  │
+├────────────┼────────────┼─────────────────┤
+│ brute      │ 26 ns      │ 38803306 ops/sec │
+│ hashmap    │ 73 ns      │ 13708959 ops/sec │
+└────────────┴────────────┴─────────────────┘
+```
+
+## 🔄 Workflow разработки
+
+1. Добавить требуемый модуль (по желанию с документацией из [`templates/module.md`](./templates/module.md))
+2. Создать задачу из шаблонов:
+
+- Код: [`templates/problem.rs`](./templates/problem.rs)
+- Документация: [`templates/problem.md`](./templates/problem.md)
+
+3. Настроить типы - обновить `Input` и `Output` под задачу
+4. Реализовать логику, желательно от 2-х
+5. Добавить `test_cases` - покрыть `edge_cases`
+6. Сравнить решения - через бенчмарки
+7. Отправить в LeetCode - проверить корректность
+
+## 📅 Планы на будущее
+
+- Добавить измерение памяти - отслеживание использования RAM
+- Автоматизация создания задач - скрипт для генерации структуры
+- Интеграция с LeetCode API - автоматическая загрузка test cases
+- Визуализация результатов - графики сравнения алгоритмов
+- Система повторения - spaced repetition для закрепления
+
+## 📄 Лицензия
+
+Этот проект лицензирован под лицензией MIT.
+Подробности в файле [LICENSE](LICENSE)
+
+---
+
+### Создано с ❤️ для системного изучения алгоритмов. Буду рад если кому-то пригодится!
+
+### ⭐ Если проект вам полезен — поставьте звезду! ⭐
