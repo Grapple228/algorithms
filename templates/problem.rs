@@ -111,36 +111,36 @@ mod tests {
         }
     }
 
-    #[test]
-    #[cfg(feature = "bench")]
-    fn bench_scaling() {
-        let sizes = [4, 10, 100, 500, 1000];
+    // #[test]
+    // #[cfg(feature = "bench")]
+    // fn bench_scaling() {
+    //     let sizes = [4, 10, 100, 500, 1000];
 
-        for &size in &sizes {
-            // Генерируем большой массив
-            let nums: Vec<i32> = (0..size as i32).collect();
-            let target = (size as i32 - 2) + (size as i32 - 1);
+    //     for &size in &sizes {
+    //         // Генерируем большой массив
+    //         let nums: Vec<i32> = (0..size as i32).collect();
+    //         let target = (size as i32 - 2) + (size as i32 - 1);
 
-            let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
-                ("sol1", Box::new(|(input, target)| solution1(input, target))),
-                // ("sol2", Box::new(|(input, target)| solution2(input, target))),
-            ];
+    //         let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
+    //             ("sol1", Box::new(|(input, target)| solution1(input, target))),
+    //             // ("sol2", Box::new(|(input, target)| solution2(input, target))),
+    //         ];
 
-            let iterations = match size {
-                4 => 100_000, // 30 ns × 100k = 3 ms
-                10 => 50_000, // 200 ns × 50k = 10 ms
-                100 => 1_000, // 20 µs × 1k = 20 ms
-                500 => 100,
-                1000 => 10, // 2 ms × 10 = 20 ms
-                10000 => 1, // 140 ms × 1 = 140 ms
-                _ => 1,
-            };
+    //         let iterations = match size {
+    //             4 => 100_000, // 30 ns × 100k = 3 ms
+    //             10 => 50_000, // 200 ns × 50k = 10 ms
+    //             100 => 1_000, // 20 µs × 1k = 20 ms
+    //             500 => 100,
+    //             1000 => 10, // 2 ms × 10 = 20 ms
+    //             10000 => 1, // 140 ms × 1 = 140 ms
+    //             _ => 1,
+    //         };
 
-            println!("\n=== n = {} ===", size);
-            let results = compare_solutions(solutions, &(nums, target), iterations);
-            print_comparison_table(&results);
-        }
-    }
+    //         println!("\n=== n = {} ===", size);
+    //         let results = compare_solutions(solutions, &(nums, target), iterations);
+    //         print_comparison_table(&results);
+    //     }
+    // }
 
     // endregion: --- Benchmarks
 }

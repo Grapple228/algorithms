@@ -5,8 +5,9 @@
 
 [![Rust](https://img.shields.io/badge/rust-1.70%2B-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Progress](https://img.shields.io/badge/Progress-1.7%25-yellow)](https://github.com/Grapple228/algorithms)
-[![Last Solved](https://img.shields.io/badge/Last%20Solved-Contains%20Duplicate-blue)](https://leetcode.com/problems/contains-duplicate/)
+[![Progress](https://img.shields.io/badge/Progress-3.3%25-yellow)](https://github.com/Grapple228/algorithms)
+[![Last Solved](https://img.shields.io/badge/Last%20Solved-Group%20Anagrams-blue)](https://leetcode.com/problems/contains-duplicate/)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-January%202025-blue)](https://github.com/Grapple228/algorithms)
 
 ## 📋 О проекте
 
@@ -87,24 +88,24 @@ n ≥ 100: Hash-структуры в 5-40x быстрее
 | Метрика                 | Значение | Прогресс |
 | ----------------------- | -------- | -------- |
 | **Всего задач в плане** | 120      | 100%     |
-| **Решено задач**        | 2        | 1.7%     |
+| **Решено задач**        | 4        | 3.3%     |
 | **Начато модулей**      | 1 из 15  | 6.7%     |
 
 ---
 
 ### 🏗️ Прогресс по модулям
 
-#### 🟢 **Модуль 1: Hash Tables** (2/7 задач, 28%)
+#### 🟢 **Модуль 1: Hash Tables** (4/7 задач, 57%)
 
-| #   | Задача                                                                                      | Статус        | Сложность | Подходы                      | Ключевые инсайты                                                           |
-| --- | ------------------------------------------------------------------------------------------- | ------------- | --------- | ---------------------------- | -------------------------------------------------------------------------- |
-| 1   | [Two Sum](https://leetcode.com/problems/two-sum/)                                           | ✅ Решена     | 🟢 Easy   | 1. Brute Force<br>2. HashMap | • HashMap выигрывает при n ≥ 100<br>• Trade-off: память ↔ время            |
-| 217 | [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)                     | ✅ Решена     | 🟢 Easy   | 1. Brute Force<br>2. HashSet | • HashSet::insert() возвращает bool<br>• Тот же переломный момент n=50-100 |
-| 242 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/)                               | 🔄 В процессе | 🟢 Easy   | _планируется_                | _ожидается сравнение frequency array vs HashMap_                           |
-| 49  | [Group Anagrams](https://leetcode.com/problems/group-anagrams/)                             | ⏳ В очереди  | 🟡 Medium | -                            | -                                                                          |
-| 349 | [Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)     | ⏳ В очереди  | 🟢 Easy   | -                            | -                                                                          |
-| 128 | [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | ⏳ В очереди  | 🔴 Hard   | -                            | -                                                                          |
-| 560 | [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)               | ⏳ В очереди  | 🟡 Medium | -                            | -                                                                          |
+| #   | Задача                                                                                      | Статус       | Сложность | Подходы                                                                    | Ключевые инсайты                                                                             |
+| --- | ------------------------------------------------------------------------------------------- | ------------ | --------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 1   | [Two Sum](https://leetcode.com/problems/two-sum/)                                           | ✅ Решена    | 🟢 Easy   | 1. Brute Force<br>2. HashMap                                               | • HashMap выигрывает при n ≥ 100<br>• Trade-off: память ↔ время                              |
+| 217 | [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)                     | ✅ Решена    | 🟢 Easy   | 1. Brute Force<br>2. HashSet                                               | • HashSet::insert() возвращает bool<br>• Тот же переломный момент n=50-100                   |
+| 242 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/)                               | ✅ Решена    | 🟢 Easy   | 1. Frequency array<br>2. Hashmap                                           | • Frequency array на 40% быстрее Hashmap<br>• [u8;26] для ASCII<br>• Hashmap для Unicode     |
+| 49  | [Group Anagrams](https://leetcode.com/problems/group-anagrams/)                             | ✅ Решена    | 🟡 Medium | 1. HashMap<[u32;26],...><br>2. HashMap<[u8;26],...><br>3. Оптимизированный | • [u8;26] в 2.1x быстрее [u32;26]<br>• Преаллокация дает +10%<br>• One-pass подход оптимален |
+| 349 | [Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)     | ⏳ В очереди | 🟢 Easy   | -                                                                          | -                                                                                            |
+| 128 | [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | ⏳ В очереди | 🔴 Hard   | -                                                                          | -                                                                                            |
+| 560 | [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)               | ⏳ В очереди | 🟡 Medium | -                                                                          | -                                                                                            |
 
 #### ⚪ **Модуль 2: Two Pointers** (0/6 задач, 0%)
 
@@ -132,7 +133,9 @@ algorithms/
 │   │   ├── p001_two_sum/        # Задача #1
 │   │   │   ├── mod.rs           # Код + тесты + бенчмарки
 │   │   │   └── problem.md       # Описание задачи
-│   │   └── p217_contains_duplicate/  # Задача #217
+│   │   ├──  p049_group_anagrams/  # Задача #049
+│   │   ├── p217_contains_duplicate/  # Задача #217
+│   │   └── p242_valid_anagram/  # Задача #242
 │   ├── utils/                   # Вспомогательные утилиты
 │   │   ├── bench.rs            # Бенчмаркинг
 │   │   ├── macros.rs           # Макросы для тестирования

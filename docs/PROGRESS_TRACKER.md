@@ -1,5 +1,10 @@
 # Отслеживание прогресса
 
+## 04 Jan 2026 07:36 PM
+
+- Решена задача #242 Valid Anagram
+- Решена задача #048 Group Anagrams
+
 ## 02 Jan 2026 10:10 PM
 
 - Решена задача #217 Contains Duplicate
