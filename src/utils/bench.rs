@@ -1,5 +1,7 @@
 //! Утилиты для бенчмаркинга и тестирования
 
+use std::collections::HashSet;
+use std::fmt::Debug;
 use std::time::{Duration, Instant};
 
 // region:    --- Структуры данных
@@ -45,6 +47,22 @@ where
     pub expected: O,
 }
 
+impl<I, T> TestCase<I, Vec<T>>
+where
+    I: Clone + std::fmt::Debug,
+    T: Ord + Debug,
+{
+    /// Создание тест-кейса с автоматической сортировкой expected
+    pub fn new_sorted(input: I, expected: Vec<T>) -> Self {
+        let mut sorted_expected = expected;
+        sorted_expected.sort();
+        Self {
+            input,
+            expected: sorted_expected,
+        }
+    }
+}
+
 impl<I, O> TestCase<I, O>
 where
     I: Clone + std::fmt::Debug,
@@ -76,6 +94,63 @@ where
             solution_name, self.input
         );
     }
+
+    /// Проверка решения с сортировкой результата (для задач, где порядок не важен)
+    pub fn assert_solution_sorted<F, T, Args>(&self, solution: F, solution_name: &str)
+    where
+        F: Fn(Args) -> O,
+        I: Into<Args> + Clone,
+        O: Clone + IntoIterator<Item = T>,
+        T: Ord + Clone + Debug,
+        Vec<T>: FromIterator<T>,
+    {
+        let mut result: Vec<T> = self.execute(solution).into_iter().collect();
+        let mut expected: Vec<T> = self.expected.clone().into_iter().collect();
+
+        result.sort();
+        expected.sort();
+
+        assert_eq!(
+            result, expected,
+            "{} failed for input {:?}\n  sorted result: {:?}\n  sorted expected: {:?}",
+            solution_name, self.input, result, expected
+        );
+    }
+
+    /// Проверка решения через HashSet (для задач, где важен только набор элементов)
+    pub fn assert_solution_set<F, T, Args>(&self, solution: F, solution_name: &str)
+    where
+        F: Fn(Args) -> O,
+        I: Into<Args> + Clone,
+        O: Clone + IntoIterator<Item = T>,
+        T: std::hash::Hash + Eq + Clone + std::fmt::Debug,
+        HashSet<T>: FromIterator<T>,
+    {
+        let result_set: HashSet<T> = self.execute(solution).into_iter().collect();
+        let expected_set: HashSet<T> = self.expected.clone().into_iter().collect();
+
+        assert_eq!(
+            result_set, expected_set,
+            "{} failed for input {:?}\n  result set: {:?}\n  expected set: {:?}",
+            solution_name, self.input, result_set, expected_set
+        );
+    }
+
+    /// Проверка решения с кастомной функцией сравнения
+    pub fn assert_solution_with<F, Args, C>(&self, solution: F, compare: C, solution_name: &str)
+    where
+        F: Fn(Args) -> O,
+        I: Into<Args> + Clone,
+        C: Fn(&O, &O) -> bool,
+    {
+        let result = self.execute(solution);
+        if !compare(&result, &self.expected) {
+            panic!(
+                "{} failed for input {:?}\n  result: {:?}\n  expected: {:?}",
+                solution_name, self.input, result, self.expected
+            );
+        }
+    }
 }
 
 // endregion: --- Структуры данных
@@ -103,6 +178,51 @@ where
             );
         }
         println!("✅ {} passed all test cases", solution_name);
+    }
+
+    /// Запуск и проверка с сортировкой
+    fn run_and_verify_sorted<F, T>(&self, solution: F, solution_name: &str)
+    where
+        F: Fn(I) -> O,
+        O: Clone + IntoIterator<Item = T>,
+        T: Ord + Clone + std::fmt::Debug,
+        Vec<T>: FromIterator<T>,
+    {
+        for (i, (input, expected)) in self.test_inputs().iter().enumerate() {
+            let mut result: Vec<T> = solution(input.clone()).into_iter().collect();
+            let mut expected_vec: Vec<T> = expected.clone().into_iter().collect();
+
+            result.sort();
+            expected_vec.sort();
+
+            assert_eq!(
+                result, expected_vec,
+                "{} failed test case {}: expected {:?}, got {:?}",
+                solution_name, i, expected_vec, result
+            );
+        }
+        println!("✅ {} passed all test cases (sorted)", solution_name);
+    }
+
+    /// Запуск и проверка через HashSet
+    fn run_and_verify_set<F, T>(&self, solution: F, solution_name: &str)
+    where
+        F: Fn(I) -> O,
+        O: Clone + IntoIterator<Item = T>,
+        T: std::hash::Hash + Eq + Clone + std::fmt::Debug,
+        HashSet<T>: FromIterator<T>,
+    {
+        for (i, (input, expected)) in self.test_inputs().iter().enumerate() {
+            let result_set: HashSet<T> = solution(input.clone()).into_iter().collect();
+            let expected_set: HashSet<T> = expected.clone().into_iter().collect();
+
+            assert_eq!(
+                result_set, expected_set,
+                "{} failed test case {}: expected set {:?}, got set {:?}",
+                solution_name, i, expected_set, result_set
+            );
+        }
+        println!("✅ {} passed all test cases (set)", solution_name);
     }
 }
 

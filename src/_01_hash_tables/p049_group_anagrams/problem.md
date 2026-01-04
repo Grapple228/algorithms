@@ -25,3 +25,33 @@ Given an array of strings `strs`, group the anagrams\* together. You can return 
 ## 🏷️ Tags
 
 `#group-anagrams` `#hashmap` `#string` `#leetcode-medium`
+
+## 🎯 Recommended Solution
+
+### **Approach: Frequency Counter Array as Hash Key**
+
+```rust
+impl Solution {
+    pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+        use std::collections::HashMap;
+
+        let mut groups: HashMap<[u8; 26], Vec<String>> = HashMap::new();
+
+        for s in strs {
+            let mut key = [0u8; 26];
+
+            // Count character frequencies
+            for &byte in s.as_bytes() {
+                key[(byte - b'a') as usize] += 1;
+            }
+
+            // Group by frequency array
+            groups.entry(key)
+                .or_insert_with(Vec::new)
+                .push(s);
+        }
+
+        groups.into_values().collect()
+    }
+}
+```

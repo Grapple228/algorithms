@@ -21,3 +21,25 @@ Given an integer array `nums`, return `true` if any value appears at least twice
 ## 🏷️ Tags
 
 `#contains-duplicate` `#hashset` `#array` `#leetcode-easy`
+
+## 🎯 Recommended Solution
+
+### **Approach: HashSet with Early Return**
+
+```rust
+impl Solution {
+    pub fn contains_duplicate(nums: Vec<i32>) -> bool {
+        use std::collections::HashSet;
+
+        let mut seen = HashSet::with_capacity(nums.len());
+
+        for &num in &nums {
+            if !seen.insert(num) {
+                return true;  // Early return on first duplicate
+            }
+        }
+
+        false
+    }
+}
+```

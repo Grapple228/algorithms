@@ -192,10 +192,6 @@ mod tests {
             }
             let t: String = t_chars.into_iter().collect();
 
-            // Проверяем, что это действительно анаграммы (для отладки)
-            assert!(solution1(s.clone(), t.clone()));
-            assert!(solution2(s.clone(), t.clone()));
-
             let solutions: Vec<(&str, Box<dyn Fn(Input) -> Output>)> = vec![
                 ("sol1", Box::new(|(s, t)| solution1(s, t))),
                 ("sol2", Box::new(|(s, t)| solution2(s, t))),
